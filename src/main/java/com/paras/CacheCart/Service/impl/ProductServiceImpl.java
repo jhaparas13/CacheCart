@@ -2,6 +2,7 @@ package com.paras.CacheCart.Service.impl;
 
 import com.paras.CacheCart.DTO.ProductDTO;
 import com.paras.CacheCart.Entity.Product;
+import com.paras.CacheCart.Exception.ResourceNotFoundException;
 import com.paras.CacheCart.Repository.ProductRepository;
 import com.paras.CacheCart.Service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO getProductById(Long id) {
         System.out.println("Fetching from DB...");
         Product product = productRepository.findById(id)
-                .orElseThrow((() -> new RuntimeException("Product not found")));
+                .orElseThrow((() -> new ResourceNotFoundException("Product not found with id: " + id)));
         return mapToDTO(product);
     }
 
@@ -48,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO updateProduct(Long id, Product product) {
 
         Product existing = productRepository.findById(id)
-                .orElseThrow((() -> new RuntimeException("Product not found")));
+                .orElseThrow((() -> new ResourceNotFoundException("Product not found with id: " + id)));
 
         existing.setName(product.getName());
         existing.setDescription(product.getDescription());
@@ -61,7 +62,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @CacheEvict(value = "products", key = "#id")
     public void deleteProduct(Long id) {
-
+        productRepository.findById(id)
+                .orElseThrow((() -> new ResourceNotFoundException("Product not found with id: " + id)));
         productRepository.deleteById(id);
 
     }
