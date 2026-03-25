@@ -1,12 +1,11 @@
 package com.paras.CacheCart.Service.impl;
 
-import com.paras.CacheCart.DTO.ProductDTO;
+import com.paras.CacheCart.DTO.ProductResponse;
 import com.paras.CacheCart.Entity.Product;
 import com.paras.CacheCart.Exception.ResourceNotFoundException;
 import com.paras.CacheCart.Repository.ProductRepository;
 import com.paras.CacheCart.Service.ProductService;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,7 +26,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cacheable(value = "products", key = "#id")
-    public ProductDTO getProductById(Long id) {
+    public ProductResponse getProductById(Long id) {
         System.out.println("Fetching from DB...");
         Product product = productRepository.findById(id)
                 .orElseThrow((() -> new ResourceNotFoundException("Product not found with id: " + id)));
@@ -36,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Cacheable(value = "products")
-    public List<ProductDTO> getAllProducts() {
+    public List<ProductResponse> getAllProducts() {
         System.out.println("Fetching all products from DB...");
         return productRepository.findAll()
                 .stream()
@@ -46,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @CachePut(value = "products", key = "#id")
-    public ProductDTO updateProduct(Long id, Product product) {
+    public ProductResponse updateProduct(Long id, Product product) {
 
         Product existing = productRepository.findById(id)
                 .orElseThrow((() -> new ResourceNotFoundException("Product not found with id: " + id)));
@@ -69,8 +68,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO mapToDTO(Product product) {
-        ProductDTO dto = new ProductDTO();
+    public ProductResponse mapToDTO(Product product) {
+        ProductResponse dto = new ProductResponse();
 
         dto.setId(product.getId());
         dto.setName(product.getName());

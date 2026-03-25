@@ -1,6 +1,6 @@
 package com.paras.CacheCart.Controller;
 
-import com.paras.CacheCart.DTO.ProductDTO;
+import com.paras.CacheCart.DTO.ProductResponse;
 import com.paras.CacheCart.Entity.Product;
 import com.paras.CacheCart.Service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +23,17 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDTO>> getAllProduct() {
+    public ResponseEntity<List<ProductResponse>> getAllProduct() {
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable Long id, @RequestBody Product product) {
         return ResponseEntity.ok(productService.updateProduct(id, product));
     }
 

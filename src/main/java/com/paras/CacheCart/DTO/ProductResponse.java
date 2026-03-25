@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductDTO implements Serializable {
+public class ProductResponse implements Serializable {
 
     private Long id;
 

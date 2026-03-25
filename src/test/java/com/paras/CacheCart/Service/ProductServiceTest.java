@@ -1,6 +1,6 @@
 package com.paras.CacheCart.Service;
 
-import com.paras.CacheCart.DTO.ProductDTO;
+import com.paras.CacheCart.DTO.ProductResponse;
 import com.paras.CacheCart.Entity.Product;
 import com.paras.CacheCart.Exception.ResourceNotFoundException;
 import com.paras.CacheCart.Repository.ProductRepository;
@@ -42,7 +42,7 @@ public class ProductServiceTest {
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
-        ProductDTO result = productService.getProductById(1L);
+        ProductResponse result = productService.getProductById(1L);
 
         assertNotNull(result);
         assertEquals("Laptop", result.getName());

@@ -1,6 +1,6 @@
 package com.paras.CacheCart.Service;
 
-import com.paras.CacheCart.DTO.ProductDTO;
+import com.paras.CacheCart.DTO.ProductResponse;
 import com.paras.CacheCart.Entity.Product;
 
 import java.util.List;
@@ -9,13 +9,13 @@ public interface ProductService {
 
     Product createProduct(Product product);
 
-    ProductDTO getProductById(Long id);
+    ProductResponse getProductById(Long id);
 
-    List<ProductDTO> getAllProducts();
+    List<ProductResponse> getAllProducts();
 
-    ProductDTO updateProduct(Long id, Product product);
+    ProductResponse updateProduct(Long id, Product product);
 
     void deleteProduct(Long id);
 
-    ProductDTO mapToDTO(Product product);
+    ProductResponse mapToDTO(Product product);
 }
