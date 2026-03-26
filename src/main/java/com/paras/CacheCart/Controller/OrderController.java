@@ -3,6 +3,7 @@ package com.paras.CacheCart.Controller;
 import com.paras.CacheCart.DTO.OrderRequest;
 import com.paras.CacheCart.Entity.Order;
 import com.paras.CacheCart.Service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +17,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public Order placeOrder(@RequestBody OrderRequest request) {
+    public Order placeOrder(@Valid @RequestBody OrderRequest request) {
         return orderService.placeOrder(request);
     }
 }

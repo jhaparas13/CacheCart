@@ -3,12 +3,15 @@ package com.paras.CacheCart.Exception;
 
 import com.paras.CacheCart.DTO.ErrorResponse;
 
+import com.paras.CacheCart.DTO.ValidationError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -43,6 +46,20 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<List<ValidationError>> handleValidationErrors(MethodArgumentNotValidException exception) {
+
+        List<ValidationError> errors = exception.getBindingResult()
+                .getFieldErrors()
+                .stream().map(fieldError -> new ValidationError(
+                        fieldError.getField(),
+                        fieldError.getDefaultMessage()
+                ))
+                .toList();
+
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
 }
