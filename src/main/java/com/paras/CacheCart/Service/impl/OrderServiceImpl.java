@@ -3,6 +3,7 @@ package com.paras.CacheCart.Service.impl;
 import com.paras.CacheCart.DTO.OrderRequest;
 import com.paras.CacheCart.Entity.Order;
 import com.paras.CacheCart.Entity.Product;
+import com.paras.CacheCart.Exception.InsufficientStockException;
 import com.paras.CacheCart.Exception.ResourceNotFoundException;
 import com.paras.CacheCart.Repository.OrderRepository;
 import com.paras.CacheCart.Repository.ProductRepository;
@@ -27,7 +28,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
         if (product.getStockQuantity() < request.getQuantity())
-            throw new RuntimeException("Insufficient stock");
+            throw new InsufficientStockException("Insufficient stock");
 
         product.setStockQuantity(product.getStockQuantity() - request.getQuantity());
         productRepository.save(product);
