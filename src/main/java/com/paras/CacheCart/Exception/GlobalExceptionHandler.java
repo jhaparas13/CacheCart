@@ -1,6 +1,7 @@
 package com.paras.CacheCart.Exception;
 
 
+import com.paras.CacheCart.DTO.ApiResponse;
 import com.paras.CacheCart.DTO.ErrorResponse;
 
 import com.paras.CacheCart.DTO.ValidationError;
@@ -17,39 +18,57 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleResourceNotFoundException(ResourceNotFoundException ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 ex.getMessage(),
-                HttpStatus.NOT_FOUND.value(),
-                LocalDateTime.now()
+                HttpStatus.NOT_FOUND.value()
         );
-        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
+
+        ApiResponse<ErrorResponse> apiResponse = ApiResponse.<ErrorResponse>builder()
+                .success(false)
+                .message("Resource not Found Error")
+                .data(errorResponse)
+                .timeStamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(Exception exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleGlobalException(Exception exception) {
         ErrorResponse errorResponse = new ErrorResponse(
                 "Something went wrong",
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                LocalDateTime.now()
+                HttpStatus.INTERNAL_SERVER_ERROR.value()
         );
-        return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+
+        ApiResponse<ErrorResponse> apiResponse = ApiResponse.<ErrorResponse>builder()
+                .success(false)
+                .message("Global Exception Error")
+                .data(errorResponse)
+                .timeStamp(LocalDateTime.now()).build();
+
+        return new ResponseEntity<>(apiResponse,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(InsufficientStockException.class)
-    public ResponseEntity<ErrorResponse> handleStockException(InsufficientStockException exception) {
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleStockException(InsufficientStockException exception) {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 exception.getMessage(),
-                HttpStatus.BAD_REQUEST.value(),
-                LocalDateTime.now()
+                HttpStatus.BAD_REQUEST.value()
         );
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        ApiResponse<ErrorResponse> apiResponse = ApiResponse.<ErrorResponse>builder()
+                .success(false)
+                .message("Insufficient Stock Error")
+                .data(errorResponse)
+                .timeStamp(LocalDateTime.now()).build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<List<ValidationError>> handleValidationErrors(MethodArgumentNotValidException exception) {
+    public ResponseEntity<ApiResponse<List<ValidationError>>> handleValidationErrors(MethodArgumentNotValidException exception) {
 
         List<ValidationError> errors = exception.getBindingResult()
                 .getFieldErrors()
@@ -59,7 +78,14 @@ public class GlobalExceptionHandler {
                 ))
                 .toList();
 
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        ApiResponse<List<ValidationError>> apiResponse = ApiResponse.<List<ValidationError>>builder()
+                .success(false)
+                .message("Validation Failed")
+                .data(errors)
+                .timeStamp(LocalDateTime.now())
+                .build();
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
