@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/cachecart
+    url: jdbc:mysql://mysql:3306/cachecart
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,9 +17,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
 
   redis:
-    host: localhost
+    host: redis
     port: 6379
 
   cache:
