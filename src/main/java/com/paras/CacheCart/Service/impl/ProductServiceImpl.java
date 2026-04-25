@@ -20,6 +20,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
+    @CachePut(value = "products", key = "#result.id")
     public Product createProduct(Product product) {
         return productRepository.save(product);
     }
@@ -27,16 +28,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Cacheable(value = "products", key = "#id")
     public ProductResponse getProductById(Long id) {
-        System.out.println("Fetching from DB...");
         Product product = productRepository.findById(id)
                 .orElseThrow((() -> new ResourceNotFoundException("Product not found with id: " + id)));
         return mapToDTO(product);
     }
 
     @Override
-    @Cacheable(value = "products")
+    @Cacheable(value = "products", unless = "#result == null")
     public List<ProductResponse> getAllProducts() {
-        System.out.println("Fetching all products from DB...");
         return productRepository.findAll()
                 .stream()
                 .map(this::mapToDTO)

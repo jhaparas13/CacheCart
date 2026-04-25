@@ -1,15 +1,16 @@
 package com.paras.CacheCart.DTO;
 
-import jakarta.persistence.PrePersist;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ApiResponse<T> {
+
+public class ApiResponse<T> implements Serializable{
     private boolean success;
     private String message;
     private T data;
